@@ -4,7 +4,7 @@ from datetime import datetime
 
 from travel_time import calculate_travel_time_with_sort
 
-filename = sys.argv[1] or "sample_delivery_logs.csv"
+filename = sys.argv[1] if len(sys.argv) > 1 else "sample_delivery_logs.csv"
 with open(filename, "r") as f:
     reader = csv.DictReader(f)
     # Create a list of deliveries
