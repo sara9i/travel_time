@@ -7,23 +7,22 @@ from datetime import datetime
 
 # NOTE: time complexity = O(n) where n is the number of rows in the CSV file
 # NOTE: space complexity = O(m) where m is the number of unique delivery persons
-def calculate_travel_time(csv_file):
+def calculate_travel_time(deliveries):
     # Create a dictionary to store the travel times for each delivery person
     travel_times = defaultdict(int)
-    # Read the CSV file
-    with open(csv_file, "r") as f:
-        reader = csv.DictReader(f)
-        # Create a dictionary to store the current delivery times for each delivery person
-        current_deliveries = {}
-        for row in reader:
-            start_time = datetime.strptime(row["Pick up time"], "%Y-%m-%dT%H:%M:%SZ")
-            end_time = datetime.strptime(row["Delivered time"], "%Y-%m-%dT%H:%M:%SZ")
-            delivery_person = row["Delivery Person"]
 
-            # Check if the delivery person is currently on another delivery
-            if delivery_person in current_deliveries:
-                # Calculate the overlap in time
-                previous_delivery = current_deliveries[delivery_person]
+    # Create a dictionary to store the current delivery times for each delivery person
+    current_deliveries = {}
+    for delivery in deliveries:
+        start_time = delivery["start_time"]
+        end_time = delivery["end_time"]
+        delivery_person = delivery["delivery_person"]
+
+        # Check if the delivery person is currently on another delivery
+        if delivery_person in current_deliveries:
+            # Calculate the overlap in time
+            previous_delivery = current_deliveries[delivery_person]
+            if previous_delivery["end_time"] > start_time:
                 overlap = (
                     min(end_time, previous_delivery["end_time"])
                     - max(start_time, previous_delivery["start_time"])
@@ -31,15 +30,13 @@ def calculate_travel_time(csv_file):
                 # Subtract the overlap from the total travel time
                 travel_times[delivery_person] -= overlap
 
-            # Add the new delivery time to the current deliveries dictionary
-            current_deliveries[delivery_person] = {
-                "start_time": start_time,
-                "end_time": end_time,
-            }
-            # Add the total travel time for the delivery
-            travel_times[delivery_person] += (
-                end_time - start_time
-            ).total_seconds() / 60
+        # Add the new delivery time to the current deliveries dictionary
+        current_deliveries[delivery_person] = {
+            "start_time": start_time,
+            "end_time": end_time,
+        }
+        # Add the total travel time for the delivery
+        travel_times[delivery_person] += (end_time - start_time).total_seconds() / 60
     return dict(travel_times)
 
 
@@ -48,39 +45,25 @@ def calculate_travel_time(csv_file):
 # NOTE: space complexity = O(m) where m is the number of unique delivery persons
 
 
-def calculate_travel_time_with_sort(csv_file):
+def calculate_travel_time_with_sort(deliveries):
     # Create a dictionary to store the travel times for each delivery person
     travel_times = defaultdict(int)
-    # Read the CSV file
-    with open(csv_file, "r") as f:
-        reader = csv.DictReader(f)
-        # Create a list of deliveries
-        deliveries = []
-        for row in reader:
-            start_time = datetime.strptime(row["Pick up time"], "%Y-%m-%dT%H:%M:%SZ")
-            end_time = datetime.strptime(row["Delivered time"], "%Y-%m-%dT%H:%M:%SZ")
-            delivery_person = row["Delivery Person"]
-            deliveries.append(
-                {
-                    "delivery_person": delivery_person,
-                    "start_time": start_time,
-                    "end_time": end_time,
-                }
-            )
 
-        # Sort the deliveries based on start time
-        deliveries.sort(key=lambda x: x["start_time"])
-        # Create a dictionary to store the current delivery times for each delivery person
-        current_deliveries = {}
-        for delivery in deliveries:
-            start_time = delivery["start_time"]
-            end_time = delivery["end_time"]
-            delivery_person = delivery["delivery_person"]
+    # Sort the deliveries based on start time
+    deliveries.sort(key=lambda x: x["start_time"])
+    # Create a dictionary to store the current delivery times for each delivery person
+    current_deliveries = {}
+    for delivery in deliveries:
+        start_time = delivery["start_time"]
+        end_time = delivery["end_time"]
+        delivery_person = delivery["delivery_person"]
 
-            # Check if the delivery person is currently on another delivery
-            if delivery_person in current_deliveries:
-                # Calculate the overlap in time
-                previous_delivery = current_deliveries[delivery_person]
+        # Check if the delivery person is currently on another delivery
+        if delivery_person in current_deliveries:
+            # Calculate the overlap in time
+            previous_delivery = current_deliveries[delivery_person]
+            # ignore if the last delivery's time is less than current delivery's start time i.e there's no overlap
+            if previous_delivery["end_time"] > start_time:
                 overlap = (
                     min(end_time, previous_delivery["end_time"])
                     - max(start_time, previous_delivery["start_time"])
@@ -88,13 +71,29 @@ def calculate_travel_time_with_sort(csv_file):
                 # Subtract the overlap from the total travel time
                 travel_times[delivery_person] -= overlap
 
-            # Add the new delivery time to the current deliveries dictionary
-            current_deliveries[delivery_person] = {
+        # Add the new delivery time to the current deliveries dictionary
+        current_deliveries[delivery_person] = {
+            "start_time": start_time,
+            "end_time": end_time,
+        }
+        # Add the total travel time for the delivery
+        travel_times[delivery_person] += (end_time - start_time).total_seconds() / 60
+    return dict(travel_times)
+
+
+with open("delivery_logs.csv", "r") as f:
+    reader = csv.DictReader(f)
+    # Create a list of deliveries
+    deliveries = []
+    for row in reader:
+        start_time = datetime.strptime(row["Pick up time"], "%Y-%m-%dT%H:%M:%SZ")
+        end_time = datetime.strptime(row["Delivered time"], "%Y-%m-%dT%H:%M:%SZ")
+        delivery_person = row["Delivery Person"]
+        deliveries.append(
+            {
+                "delivery_person": delivery_person,
                 "start_time": start_time,
                 "end_time": end_time,
             }
-            # Add the total travel time for the delivery
-            travel_times[delivery_person] += (
-                end_time - start_time
-            ).total_seconds() / 60
-    return dict(travel_times)
+        )
+    result = calculate_travel_time_with_sort(deliveries)
