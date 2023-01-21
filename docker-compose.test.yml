@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    command: python -m unittest test.py
+    volumes:
+      - .:/app
+    working_dir: /app
