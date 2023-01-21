@@ -21,4 +21,3 @@ with open(filename, "r") as f:
             }
         )
     result = calculate_travel_time_with_sort(deliveries)
-    print(f"result: {result}")
