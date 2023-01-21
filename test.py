@@ -2,7 +2,7 @@ import csv
 import unittest
 from datetime import datetime
 
-from script import calculate_travel_time_with_sort
+from travel_time import calculate_travel_time_with_sort
 
 
 class TestCalculateTravelTime(unittest.TestCase):

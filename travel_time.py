@@ -1,4 +1,5 @@
 import csv
+import sys
 from collections import defaultdict
 from datetime import datetime
 
@@ -52,21 +53,3 @@ def calculate_travel_time_with_sort(deliveries):
     # Sort the deliveries based on start time
     deliveries.sort(key=lambda x: x["start_time"])
     return calculate_travel_time(deliveries)
-
-
-with open("delivery_logs.csv", "r") as f:
-    reader = csv.DictReader(f)
-    # Create a list of deliveries
-    deliveries = []
-    for row in reader:
-        start_time = datetime.strptime(row["Pick up time"], "%Y-%m-%dT%H:%M:%SZ")
-        end_time = datetime.strptime(row["Delivered time"], "%Y-%m-%dT%H:%M:%SZ")
-        delivery_person = row["Delivery Person"]
-        deliveries.append(
-            {
-                "delivery_person": delivery_person,
-                "start_time": start_time,
-                "end_time": end_time,
-            }
-        )
-    result = calculate_travel_time_with_sort(deliveries)
