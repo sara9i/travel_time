@@ -62,10 +62,10 @@ docker-compose -d
 
 #### Dev Dependencies
 
-- Install autohooks and plugin dependencies
-  pip install autohooks
-  pip install autohooks-plugin-isort
-  pip install autohooks-plugin-black
-  pip install autohooks-plugin-pylint
+- Install autohooks and plugin dependencies</br>
+  pip install autohooks</br>
+  pip install autohooks-plugin-isort</br>
+  pip install autohooks-plugin-black</br>
+  pip install autohooks-plugin-pylint</br>
 
 - Activate autohooks `autohooks activate` and check it has all 3 modules loadable by `autohooks check`
