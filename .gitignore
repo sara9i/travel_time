@@ -6,3 +6,6 @@ __pycache__/
 # Environments
 config.env
 .venv
+
+#autohooks settings
+pyproject.toml
