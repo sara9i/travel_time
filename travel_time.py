@@ -1,7 +1,4 @@
-import csv
-import sys
 from collections import defaultdict
-from datetime import datetime
 
 # NOTE: using defaultdict from the python's collections module, which returns a default value for a non-existent key
 # so we don't have to check for key existence.
@@ -47,9 +44,6 @@ def calculate_travel_time(deliveries):
 
 
 def calculate_travel_time_with_sort(deliveries):
-    # Create a dictionary to store the travel times for each delivery person
-    travel_times = defaultdict(int)
-
     # Sort the deliveries based on start time
     deliveries.sort(key=lambda x: x["start_time"])
     return calculate_travel_time(deliveries)
