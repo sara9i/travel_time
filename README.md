@@ -4,12 +4,18 @@ https://docs.google.com/document/d/1XgHwXSE0c-JvsEHq_ELfwl7P8U_-T_8TntHHNmuEpqg/
 * Python
 
 ## Start development server
-```sh
 
+#### Local Server
+
+```sh
 # run the script locally with csv filename
 python run.py <filename.csv>
 
-# run script in Docker
+``` 
+
+#### Docker
+
+```sh
 # set csv file name as env variable
 export FILENAME=<filename.csv>
 #use docker-compose.yml to get the docker container running
@@ -20,19 +26,24 @@ docker-compose up -d
 
 For code testing used python's `unittest`
 
-```sh
+#### Local Server
 
+```sh
 # run tests locally
 python -m unittest test.py
+``` 
 
-# run tests in Docker
+#### Docker
+
+```sh
+# use docker-compose.test.yml to run the tests in docker container
 docker-compose -f docker-compose.test.yml up -d
 ``` 
 
 
 ## Dependencies
 
-###Virtual Envoirnment
+#### Virtual Envoirnment
 - Create a virtual env: `virtualenv .venv`
 - Start the virtual env: `source .venv/bin/activate`
 - Install dependencies inside virtual env
@@ -49,7 +60,7 @@ On Docker
 docker-compose -d
 ```
 
-###Dev Dependencies
+#### Dev Dependencies
 
 - Install autohooks and plugin dependencies
   pip install autohooks
